@@ -1,77 +1,51 @@
-function decision_chart(div_name, title, y_title){
-  var chart = new Highcharts.Chart({
-    chart: {
-      type: 'spline',                                                     
-      renderTo: div_name
+function decision_chart(div_name, data_arr, title){
+  // Create the chart
+  $('#'+div_name).highcharts('StockChart', {
+
+    rangeSelector: {
+      selected: 1
     },
-    title: {                                                                
-      text: title
-    },                                                                      
-    credits: {
-      enabled: false
-    },
-    legend: {                                                               
-      enabled: false                                                      
-    },                                                                      
+
     xAxis: {
+      lineWidth: 2
     },
-    yAxis: {                                                                
-      title: {                                                            
-        text: y_title
-      }                                                                
-    },                                                                      
-    tooltip: {                                                              
-      enabled: false,
-      formatter: function() {                                             
-        return '<b>'+ this.series.name +'</b><br>'+                
-        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br>'+
-        Highcharts.numberFormat(this.y, 2);                         
-      }                                                                   
-    },                                                                      
+
     series: [{
-      data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      color: "#7cb5ec",
+      data: data_arr.R0_H_inf
     },{
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      color: "#7cb5ec",
+      data: data_arr.R0_H_sup
     },{
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      color: "#90ed7d",
+      data: data_arr.R1_H_inf
+    },{
+      color: "#90ed7d",
+      data: data_arr.R1_H_sup
+    },{
+      color: "#f7a35c",
+      data: data_arr.R2_H_inf
+    },{
+      color: "#f7a35c",
+      data: data_arr.R2_H_sup
     }]
   });
-  return chart;
 }
 
-function state_charts(div_name, title, y_title){
-  var chart = new Highcharts.Chart({
-    chart: {
-      type: 'spline',                                                     
-      renderTo: div_name
+function state_chart(div_name, data_arr, y_title){
+  // Create the chart
+  $('#'+div_name).highcharts('StockChart', {
+
+    rangeSelector: {
+      selected: 1
     },
-    title: {                                                                
-      text: title
-    },                                                                      
-    credits: {
-      enabled: false
-    },
-    legend: {                                                               
-      enabled: false                                                      
-    },                                                                      
+
     xAxis: {
+      lineWidth: 2
     },
-    yAxis: {                                                                
-      title: {                                                            
-        text: y_title
-      }                                                                
-    },                                                                      
-    tooltip: {                                                              
-      enabled: false,
-      formatter: function() {                                             
-        return '<b>'+ this.series.name +'</b><br>'+                
-        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br>'+
-        Highcharts.numberFormat(this.y, 2);                         
-      }                                                                   
-    },                                                                      
+
     series: [{
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]        
+      data: data_arr
     }]
   });
-  return chart;
 }

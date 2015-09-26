@@ -90,9 +90,11 @@
 
 /* #### Chart style #### */
 .decision-chart{
+  float: left;
+  width: 50%;
   height: 400px;
-  margin-left: 400px;
-  margin-right: 400px;
+  /* margin-left: 100px; */
+  /* margin-right: 100px; */
 }
 .state-chart{
   float: left;

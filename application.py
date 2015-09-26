@@ -1,6 +1,5 @@
-from flask import Flask, render_template, jsonify
-from random import random
-from time import time
+from flask import Flask, render_template, jsonify, request
+import scipy.io as sio
 
 app = Flask(__name__)
 
@@ -9,31 +8,35 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/signals')
-def display_signals():
 
-    return render_template('signals.html')
-
-@app.route('/data')
+@app.route('/data', methods=['GET', 'POST'])
 def send_data():
 
-    x = time()
-    y = random()
-    return jsonify({"x": x, "y": y})
+    if request.method == 'POST':
+        if request.form['fault_type'] == '1':
+            var_junbo = sio.loadmat('./data/var_lm1.mat')
+        else:
+            var_junbo = sio.loadmat('./data/var_lm2.mat')
+        return jsonify({
+            'h1': var_junbo['H1'][:,0].tolist(),
+            'v1': var_junbo['V1'][:,0].tolist(),
+            'alpha1': var_junbo['alpha1'][:,0].tolist(),
+            'theta1': var_junbo['theta1'][:,0].tolist(),
+            'q1': var_junbo['q1'][:,0].tolist(),
+            'R0_H_inf': var_junbo['R0_H_inf'][0,:].tolist(),
+            'R0_H_sup': var_junbo['R0_H_sup'][0,:].tolist(),
+            'R1_H_inf': var_junbo['R1_H_inf'][0,:].tolist(),
+            'R1_H_sup': var_junbo['R1_H_sup'][0,:].tolist(),
+            'R2_H_inf': var_junbo['R2_H_inf'][0,:].tolist(),
+            'R2_H_sup': var_junbo['R2_H_sup'][0,:].tolist(),
+            'R0_V_inf': var_junbo['R0_V_inf'][0,:].tolist(),
+            'R0_V_sup': var_junbo['R0_V_sup'][0,:].tolist(),
+            'R1_V_inf': var_junbo['R1_V_inf'][0,:].tolist(),
+            'R1_V_sup': var_junbo['R1_V_sup'][0,:].tolist(),
+            'R2_V_inf': var_junbo['R2_V_inf'][0,:].tolist(),
+            'R2_V_sup': var_junbo['R2_V_sup'][0,:].tolist()
+        })
 
-@app.route('/state')
-def send_state():
-
-    x = time()
-    y = random()
-    upper_bound = 1
-    lower_bound = 0
-    return jsonify({
-        "x": x,
-        "y": y,
-        "upper_bound": upper_bound,
-        "lower_bound": lower_bound
-    })
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

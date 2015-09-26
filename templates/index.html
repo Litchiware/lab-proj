@@ -5,36 +5,31 @@
     <meta name="viewport" content="width=device-width">
     <title>项目演示界面</title>
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="{{ url_for('static', filename='chart.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
     <script type="text/javascript" charset="utf-8">
       $(function () {
-        chart = decision_chart('random', 'Live random data', 'value' );
-        setInterval(function() {                                    
-          $.getJSON('/state',function(data) {
-            chart.series[0].addPoint(data.upper_bound, false, true);
-            chart.series[1].addPoint(data.y, false, true);
-            chart.series[2].addPoint(data.lower_bound, true, true);
-          })
-        }, 1000);                                                   
-
-        chart1 = state_charts('random1', 'Live random data', 'value' );
-        chart2 = state_charts('random2', 'Live random data', 'value' );
-        chart3 = state_charts('random3', 'Live random data', 'value' );
-        chart4 = state_charts('random4', 'Live random data', 'value' );
-        chart5 = state_charts('random5', 'Live random data', 'value' );
-        setInterval(function() {                                    
-          $.getJSON('/data',function(data) {
-            chart1.series[0].addPoint(data.y, true, true);
-            chart2.series[0].addPoint(data.y, true, true);
-            chart3.series[0].addPoint(data.y, true, true);
-            chart4.series[0].addPoint(data.y, true, true);
-            chart5.series[0].addPoint(data.y, true, true);
-          })
-        }, 1000);                                                   
+        Highcharts.setOptions({
+          global : {
+            useUTC : false
+          }
+        });
+        $('#init-form').ajaxForm(function(data) { 
+          $('.nav-tabs a[href="#tab2"]').tab('show');
+          decision_chart('H_decision', data, 'Live random data');
+          decision_chart('V_decision', data, 'Live random data');
+          state_chart('H1', data.h1, 'Live random data');
+          state_chart('V1', data.v1, 'Live random data');
+          state_chart('alpha1', data.alpha1, 'Live random data');
+          state_chart('theta1', data.theta1, 'Live random data');
+          state_chart('q1', data.q1, 'Live random data');
+        }); 
       });
     </script>
   </head>
@@ -43,46 +38,62 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Section 1</a></li>
         <li><a href="#tab2" data-toggle="tab">Section 2</a></li>
+        <li><a href="#tab3" data-toggle="tab">Section 3</a></li>
       </ul>
-      <div class="tab-content">
+      <div class="tab-content" style="margin-top: 100px">
         <div class="tab-pane active" id="tab1">
-          <div id="random" class="decision-chart"></div>
-          <form action="" method="post" class="bootstrap-frm">
-            <h1>Contact Form 
-              <span>Please fill all the texts in the fields.</span>
+          <form id="init-form" action="/data" method="post" class="bootstrap-frm">
+            <h1>状态初始化
+              <span>请将各个状态变量的初始值填入对应框中</span>
             </h1>
             <label>
-              <span>Your Name :</span>
-              <input id="name" type="text" name="name" placeholder="Your Full Name" />
+              <span>高度：</span>
+              <input id="H1-input" type="number" name="h1" placeholder=0 />
             </label>
             
             <label>
-              <span>Your Email :</span>
-              <input id="email" type="email" name="email" placeholder="Valid Email Address" />
+              <span>速度：</span>
+              <input id="V1-input" type="number" name="v1" placeholder=0 />
             </label>
             
             <label>
-              <span>Message :</span>
-              <textarea id="message" name="message" placeholder="Your Message to Us"></textarea>
+              <span>攻角：</span>
+              <input id="alpha1-input" type="number" name="alpha1" placeholder=0 />
+            </label>
+            
+            <label>
+              <span>俯仰角：</span>
+              <input id="theta1-input" type="number" name="theta1" placeholder=0 />
+            </label>
+
+            <label>
+              <span>俯仰角速率：</span>
+              <input id="q1-input" type="number" name="q1" placeholder=0 />
             </label> 
+
             <label>
-              <span>Subject :</span><select name="selection">
-              <option value="Job Inquiry">Job Inquiry</option>
-              <option value="General Question">General Question</option>
+              <span>故障类型：</span><select name="fault_type">
+              <option value="1">种类1</option>
+              <option value="2">种类2</option>
               </select>
             </label>    
+
             <label>
               <span>&nbsp;</span> 
-              <input type="button" class="button" value="Send" /> 
+              <input type="submit" value="确定" /> 
             </label>    
           </form>
         </div>
         <div class="tab-pane" id="tab2">
-          <div id="random1" class="state-chart"></div>
-          <div id="random2" class="state-chart"></div>
-          <div id="random3" class="state-chart"></div>
-          <div id="random4" class="state-chart"></div>
-          <div id="random5" class="state-chart"></div>
+          <div id="H_decision" class="decision-chart"></div>
+          <div id="V_decision" class="decision-chart"></div>
+        </div>
+        <div class="tab-pane" id="tab3">
+          <div id="H1" class="state-chart"></div>
+          <div id="V1" class="state-chart"></div>
+          <div id="alpha1" class="state-chart"></div>
+          <div id="theta1" class="state-chart"></div>
+          <div id="q1" class="state-chart"></div>
         </div>
       </div>
     </div>
