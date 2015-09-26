@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>状态变量观测界面</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function mychart(div_name, title, y_title){
+        var chart = new Highcharts.Chart({
+          chart: {
+            type: 'spline',                                                     
+            renderTo: div_name
+          },
+          title: {                                                                
+            text: title
+          },                                                                      
+          credits: {
+            enabled: false
+          },
+          legend: {                                                               
+            enabled: false                                                      
+          },                                                                      
+          xAxis: {
+          },
+          yAxis: {                                                                
+            title: {                                                            
+              text: y_title
+            }                                                                
+          },                                                                      
+          tooltip: {                                                              
+            enabled: false,
+            formatter: function() {                                             
+              return '<b>'+ this.series.name +'</b><br>'+                
+              Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br>'+
+              Highcharts.numberFormat(this.y, 2);                         
+            }                                                                   
+          },                                                                      
+          series: [{
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]        
+          }]
+        });
+        return chart;
+      }
+      $(function () {
+        chart = mychart('random', 'Live random data', 'value' );
+        chart2 = mychart('random2', 'Live random data', 'value' );
+        chart3 = mychart('random3', 'Live random data', 'value' );
+        chart4 = mychart('random4', 'Live random data', 'value' );
+        chart5 = mychart('random5', 'Live random data', 'value' );
+        setInterval(function() {                                    
+          $.getJSON('/data',function(data) {
+            chart.series[0].addPoint(data.y, true, true);
+            chart2.series[0].addPoint(data.y, true, true);
+            chart3.series[0].addPoint(data.y, true, true);
+            chart4.series[0].addPoint(data.y, true, true);
+            chart5.series[0].addPoint(data.y, true, true);
+          })
+        }, 1000);                                                   
+      });
+    </script>
+    <style type="text/css" media="screen">
+      .container{
+        float: left;
+        width: 50%;
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="random" class="container"></div>
+    <div id="random2" class="container"></div>
+    <div id="random3" class="container"></div>
+    <div id="random4" class="container"></div>
+    <div id="random5" class="container"></div>
+  </body>
+</html>

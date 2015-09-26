@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>项目演示界面</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="{{ url_for('static', filename='mychart.js') }}"></script>
+    <script type="text/javascript" charset="utf-8">
+      function mychart(div_name, title, y_title){
+        var chart = new Highcharts.Chart({
+          chart: {
+            type: 'spline',                                                     
+            renderTo: div_name
+          },
+          title: {                                                                
+            text: title
+          },                                                                      
+          credits: {
+            enabled: false
+          },
+          legend: {                                                               
+            enabled: false                                                      
+          },                                                                      
+          xAxis: {
+          },
+          yAxis: {                                                                
+            title: {                                                            
+              text: y_title
+            }                                                                
+          },                                                                      
+          tooltip: {                                                              
+            enabled: false,
+            formatter: function() {                                             
+              return '<b>'+ this.series.name +'</b><br>'+                
+              Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br>'+
+              Highcharts.numberFormat(this.y, 2);                         
+            }                                                                   
+          },                                                                      
+          series: [{
+            data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+          },{
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          },{
+            data: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+          }]
+        });
+        return chart;
+      }
+      $(function () {
+        chart = mychart('random', 'Live random data', 'value' );
+        setInterval(function() {                                    
+          $.getJSON('/data',function(data) {
+            chart.series[0].addPoint(1, false, true);
+            chart.series[1].addPoint(data.y, false, true);
+            chart.series[2].addPoint(-1, true, true);
+          })
+        }, 1000);                                                   
+      });
+    </script>
+    <style type="text/css" media="screen">
+      .container{
+        float: left;
+        width: 50%;
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/signals" target="_blank" type="button">状态信号观测界面</a>
+    <div id="random" class="container"></div>
+  </body>
+</html>
