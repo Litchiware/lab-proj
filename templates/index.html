@@ -43,7 +43,7 @@
           },{
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           },{
-            data: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           }]
         });
         return chart;
@@ -51,10 +51,10 @@
       $(function () {
         chart = mychart('random', 'Live random data', 'value' );
         setInterval(function() {                                    
-          $.getJSON('/data',function(data) {
-            chart.series[0].addPoint(1, false, true);
+          $.getJSON('/state',function(data) {
+            chart.series[0].addPoint(data.upper_bound, false, true);
             chart.series[1].addPoint(data.y, false, true);
-            chart.series[2].addPoint(-1, true, true);
+            chart.series[2].addPoint(data.lower_bound, true, true);
           })
         }, 1000);                                                   
       });

@@ -21,5 +21,19 @@ def send_data():
     y = random()
     return jsonify({"x": x, "y": y})
 
+@app.route('/state')
+def send_state():
+
+    x = time()
+    y = random()
+    upper_bound = 1
+    lower_bound = 0
+    return jsonify({
+        "x": x,
+        "y": y,
+        "upper_bound": upper_bound,
+        "lower_bound": lower_bound
+    })
+
 if __name__ == '__main__':
     app.run()
