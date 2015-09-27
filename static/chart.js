@@ -26,7 +26,6 @@ function decision_chart(chart_container$){
     xAxis: {
       lineWidth: 2
     },
-
     plotOptions: {
       series: {
         animation: {

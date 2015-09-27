@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <title>项目演示界面</title>
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.43/jquery.form-validator.min.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script> 
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -47,13 +48,16 @@
         }); 
       });
     </script>
+    <script type="text/javascript" charset="utf-8">
+      $.validate();
+    </script>
   </head>
   <body>
     <div class="tabbable">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab">Section 1</a></li>
-        <li><a href="#tab2" data-toggle="tab">Section 2</a></li>
-        <li><a href="#tab3" data-toggle="tab">Section 3</a></li>
+        <li class="active"><a href="#tab1" data-toggle="tab">状态初始化</a></li>
+        <li><a href="#tab2" data-toggle="tab">故障诊断结果</a></li>
+        <li><a href="#tab3" data-toggle="tab">状态变量观测</a></li>
       </ul>
       <div class="tab-content" style="margin-top: 100px">
         <div class="tab-pane active" id="tab1">
@@ -63,31 +67,31 @@
             </h1>
             <label>
               <span>高度：</span>
-              <input id="H1-input" type="number" name="H1" placeholder=0 />
+              <input id="H1-input" type="number" name="H1" required="required"/>
             </label>
             
             <label>
               <span>速度：</span>
-              <input id="V1-input" type="number" name="v1" placeholder=0 />
+              <input id="V1-input" type="number" name="v1" required="required"/>
             </label>
             
             <label>
               <span>攻角：</span>
-              <input id="alpha1-input" type="number" name="alpha1" placeholder=0 />
+              <input id="alpha1-input" type="number" name="alpha1" required="required"/>
             </label>
             
             <label>
               <span>俯仰角：</span>
-              <input id="theta1-input" type="number" name="theta1" placeholder=0 />
+              <input id="theta1-input" type="number" name="theta1" required="required"/>
             </label>
 
             <label>
               <span>俯仰角速率：</span>
-              <input id="q1-input" type="number" name="q1" placeholder=0 />
+              <input id="q1-input" type="number" name="q1" required="required"/>
             </label> 
 
             <label>
-              <span>故障类型：</span><select name="fault_type">
+              <span>故障类型：</span><select name="fault_type" required="required">
               <option value="1">种类1</option>
               <option value="2">种类2</option>
               </select>
