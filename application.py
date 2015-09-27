@@ -18,8 +18,8 @@ def send_data():
         else:
             var_junbo = sio.loadmat('./data/var_lm2.mat')
         return jsonify({
-            'h1': var_junbo['H1'][:,0].tolist(),
-            'v1': var_junbo['V1'][:,0].tolist(),
+            'H1': var_junbo['H1'][:,0].tolist(),
+            'V1': var_junbo['V1'][:,0].tolist(),
             'alpha1': var_junbo['alpha1'][:,0].tolist(),
             'theta1': var_junbo['theta1'][:,0].tolist(),
             'q1': var_junbo['q1'][:,0].tolist(),

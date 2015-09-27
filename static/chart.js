@@ -1,51 +1,99 @@
-function decision_chart(div_name, data_arr, title){
+function decision_chart(chart_container$){
+  var ct = chart_container$.attr('id').split('_')[0]; //ct: chart type flag
   // Create the chart
-  $('#'+div_name).highcharts('StockChart', {
+  chart_container$.highcharts('StockChart', {
+
+    title: {
+      text: chart_titles[chart_types.indexOf(ct)]
+    },
+
+    legend: {
+      enabled: true,
+      labelFormatter: function () {
+        return window.series_legends[this._i]
+      }
+    },
+
+    credits: {
+      enabled: false
+    },
 
     rangeSelector: {
-      selected: 1
+      selected: 1,
+      enabled: false
     },
 
     xAxis: {
       lineWidth: 2
     },
 
-    series: [{
-      color: "#7cb5ec",
-      data: data_arr.R0_H_inf
-    },{
-      color: "#7cb5ec",
-      data: data_arr.R0_H_sup
-    },{
-      color: "#90ed7d",
-      data: data_arr.R1_H_inf
-    },{
-      color: "#90ed7d",
-      data: data_arr.R1_H_sup
-    },{
-      color: "#f7a35c",
-      data: data_arr.R2_H_inf
-    },{
-      color: "#f7a35c",
-      data: data_arr.R2_H_sup
-    }]
+    plotOptions: {
+      series: {
+        animation: {
+          duration: 3000
+        }
+      }
+    },
+
+    series: function(){
+      ret = [];
+      var list1 = ['R0_', 'R1_', 'R2_'];
+      var list2 = ['_inf','_sup'];
+      for (var i in list1){
+        for (var j in list2){
+          ret.push({
+            color: window.series_colors[i],
+            data: window.data[list1[i]+ct+list2[j]]
+          });
+        }
+      }
+      return ret;
+    }()
   });
 }
 
-function state_chart(div_name, data_arr, y_title){
+function state_chart(chart_container$){
   // Create the chart
-  $('#'+div_name).highcharts('StockChart', {
+  var ct = chart_container$.attr('id'); //ct: chart type
+  
+  chart_container$.highcharts( {
 
-    rangeSelector: {
-      selected: 1
+    plotOptions: {
+      series: {
+        animation: {
+          duration: 3000
+        }
+      }
+    },
+
+    title: {
+      text: chart_titles[chart_types.indexOf(ct)]
+    },
+
+    legend: {
+      enabled: false
+    },
+
+    credits: {
+      enabled: false
     },
 
     xAxis: {
       lineWidth: 2
     },
 
-    series: [{
-      data: data_arr
-    }]
+    yAxis: {
+      title:{
+        text: chart_value_labels[chart_types.indexOf(ct)]
+      }
+    },
+
+    series: function(){
+      return [{
+        color: window.series_colors[chart_types.indexOf(ct)],
+        data: window.data[ct]
+      }];
+    }()
+
   });
 }

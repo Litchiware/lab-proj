@@ -20,15 +20,30 @@
             useUTC : false
           }
         });
-        $('#init-form').ajaxForm(function(data) { 
+        $('#init-form').ajaxForm(function(json_data) { 
+          window.data = json_data;
+          window.chart_types = ['H1', 'V1', 'alpha1', 'theta1', 'q1', 'H', 'V'];
+          window.chart_titles = ['高度变化曲线', '速度变化曲线', '攻角变化曲线', '俯仰角变化曲线', '俯仰角速度变化曲线', '水平分量变化曲线', '竖直分量变化曲线', '水平分量变化曲线']
+          window.series_legends = ['R0_inf', 'R0_sup', 'R1_inf', 'R1_sup', 'R2_inf', 'R2_sup'];
+          window.series_colors = ["#7cb5ec", "#90ed7d", "#f7a35c", "#434348", "#8085e9"];
+          window.chart_value_labels = ['高度(m)', '速度(m/s)', '攻角(Rad)', '俯仰角(Rad)', '俯仰角速度(Rad/s)'];
           $('.nav-tabs a[href="#tab2"]').tab('show');
-          decision_chart('H_decision', data, 'Live random data');
-          decision_chart('V_decision', data, 'Live random data');
-          state_chart('H1', data.h1, 'Live random data');
-          state_chart('V1', data.v1, 'Live random data');
-          state_chart('alpha1', data.alpha1, 'Live random data');
-          state_chart('theta1', data.theta1, 'Live random data');
-          state_chart('q1', data.q1, 'Live random data');
+        });
+        $('.nav-tabs a[href="#tab2"]').bind('shown.bs.tab', function (e) {
+          $('#tab2 div.decision-chart').each(function(index){
+            if ($(this).highcharts('StockChart') != undefined) {
+              $(this).highcharts('StockChart').destroy();
+            }
+            decision_chart($(this));
+          });
+        });
+        $('.nav-tabs a[href="#tab3"]').bind('click', function (e) {
+          $('#tab3 div.state-chart').each(function(index){
+            if ($(this).highcharts('StockChart') != undefined) {
+              $(this).highcharts('StockChart').destroy();
+            }
+            state_chart($(this));
+          });
         }); 
       });
     </script>
@@ -48,7 +63,7 @@
             </h1>
             <label>
               <span>高度：</span>
-              <input id="H1-input" type="number" name="h1" placeholder=0 />
+              <input id="H1-input" type="number" name="H1" placeholder=0 />
             </label>
             
             <label>
